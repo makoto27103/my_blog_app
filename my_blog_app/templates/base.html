@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>マイブログ</title>
+    <style>
+        :root {
+            --bg-color: #f6f4ef;
+            --card-bg: #ffffff;
+            --text-main: #2b2a29;
+            --text-muted: #76726b;
+            --accent: #c85a32;
+            --accent-hover: #a84622;
+            --border-color: #eae5dc;
+            --soft-bg: #fbf9f5;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 36px 20px 64px;
+            line-height: 1.8;
+        }
+
+        header {
+            margin-bottom: 28px;
+        }
+
+        .site-title {
+            margin: 0 0 14px;
+            font-size: 1.8rem;
+            letter-spacing: 0.04em;
+        }
+
+        .site-title a {
+            text-decoration: none;
+            color: var(--text-main);
+        }
+
+        nav {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 999px;
+            padding: 10px 20px;
+            display: flex;
+            gap: 18px;
+            align-items: center;
+            flex-wrap: wrap;
+            box-shadow: 0 4px 14px rgba(43, 42, 41, 0.04);
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-main);
+            font-size: 0.92rem;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+
+        nav a:hover {
+            color: var(--accent);
+        }
+
+        .nav-user {
+            margin-left: auto;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        main {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 8px 24px rgba(43, 42, 41, 0.05);
+        }
+
+        h2 {
+            margin-top: 0;
+            font-size: 1.35rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 24px;
+        }
+
+        h3 {
+            margin: 0 0 6px;
+            font-size: 1.15rem;
+        }
+
+        h3 a {
+            text-decoration: none;
+            color: var(--text-main);
+            transition: color 0.2s ease;
+        }
+
+        h3 a:hover {
+            color: var(--accent);
+        }
+
+        small {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .post {
+            background: var(--soft-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px 22px;
+            margin-bottom: 18px;
+        }
+
+        .post:last-child {
+            margin-bottom: 0;
+        }
+
+        a {
+            color: var(--accent);
+        }
+
+        a:hover {
+            color: var(--accent-hover);
+        }
+
+        input[type="text"],
+        input[type="password"],
+        textarea {
+            width: 100%;
+            padding: 11px 14px;
+            margin-top: 6px;
+            margin-bottom: 16px;
+            border: 1px solid #d8d1c5;
+            border-radius: 8px;
+            background: #fff;
+            color: var(--text-main);
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(200, 90, 50, 0.14);
+        }
+
+        input[type="file"] {
+            margin-top: 8px;
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+        }
+
+        textarea {
+            min-height: 200px;
+            resize: vertical;
+        }
+
+        button {
+            background-color: var(--accent);
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+        }
+
+        button:hover {
+            background-color: var(--accent-hover);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .flash-list {
+            background: #fff3ef;
+            border: 1px solid #f3c6b6;
+            color: #9e2f12;
+            border-radius: 10px;
+            padding: 12px 18px;
+            margin: 0 0 20px;
+            list-style: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 class="site-title"><a href="{{ url_for('index') }}">マイブログ</a></h1>
+        <nav>
+            <a href="{{ url_for('index') }}">ホーム</a>
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('create') }}">記事を書く</a>
+                <span class="nav-user">{{ current_user.username }} さん</span>
+                <a href="{{ url_for('logout') }}">ログアウト</a>
+            {% else %}
+                <a href="{{ url_for('login') }}">ログイン</a>
+                <a href="{{ url_for('register') }}">新規登録</a>
+            {% endif %}
+        </nav>
+    </header>
+    <main>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class="flash-list">
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

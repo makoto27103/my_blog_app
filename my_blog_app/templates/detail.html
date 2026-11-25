@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="post">
+    <h2>{{ post.title }}</h2>
+    <small>投稿者: {{ post.author.username }} ｜ {{ post.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+    {% if post.image_filename %}
+        <div style="margin: 16px 0;">
+            <img src="{{ url_for('static', filename='uploads/' + post.image_filename) }}"
+                 alt="{{ post.title }}"
+                 style="max-width: 100%; height: auto; border-radius: 4px;">
+        </div>
+    {% endif %}
+    <div style="white-space: pre-line; margin-top: 20px;">{{ post.body }}</div>
+</div>
+
+{% if current_user.is_authenticated and post.user_id == current_user.id %}
+    <div style="margin-top: 20px; display: flex; gap: 12px; align-items: center;">
+        <a href="{{ url_for('edit', post_id=post.id) }}">編集する</a>
+        <form method="POST" action="{{ url_for('delete', post_id=post.id) }}" onsubmit="return confirm('この記事を削除しますか？');">
+            <button type="submit">削除する</button>
+        </form>
+    </div>
+{% endif %}
+
+<p style="margin-top: 20px;"><a href="{{ url_for('index') }}">← 一覧に戻る</a></p>
+{% endblock %}

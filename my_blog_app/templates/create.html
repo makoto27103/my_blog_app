@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>新しい記事を作成</h2>
+<form method="POST" enctype="multipart/form-data">
+    <div>
+        <label>タイトル</label><br>
+        <input type="text" name="title" required>
+    </div>
+    <div>
+        <label>写真（任意）</label><br>
+        <input type="file" name="image" accept=".png,.jpg,.jpeg,.gif,.webp">
+    </div>
+    <div style="margin-top: 15px;">
+        <label>本文</label><br>
+        <textarea name="body" required></textarea>
+    </div>
+    <button type="submit">投稿する</button>
+</form>
+<p style="margin-top: 15px;"><a href="{{ url_for('index') }}">← 一覧に戻る</a></p>
+{% endblock %}

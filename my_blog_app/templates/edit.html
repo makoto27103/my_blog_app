@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>記事を編集</h2>
+<form method="POST" enctype="multipart/form-data">
+    <div>
+        <label>タイトル</label><br>
+        <input type="text" name="title" value="{{ post.title }}" required>
+    </div>
+    {% if post.image_filename %}
+        <div style="margin: 12px 0;">
+            <p>現在の画像：</p>
+            <img src="{{ url_for('static', filename='uploads/' + post.image_filename) }}"
+                 alt="{{ post.title }}"
+                 style="max-width: 240px; border-radius: 4px;">
+        </div>
+    {% endif %}
+    <div>
+        <label>新しい写真に変更（任意）</label><br>
+        <input type="file" name="image" accept=".png,.jpg,.jpeg,.gif,.webp">
+    </div>
+    <div style="margin-top: 15px;">
+        <label>本文</label><br>
+        <textarea name="body" required>{{ post.body }}</textarea>
+    </div>
+    <button type="submit">更新する</button>
+</form>
+<p style="margin-top: 15px;"><a href="{{ url_for('detail', post_id=post.id) }}">← 詳細に戻る</a></p>
+{% endblock %}
